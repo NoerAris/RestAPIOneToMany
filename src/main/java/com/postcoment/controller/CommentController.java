@@ -37,7 +37,6 @@ public class CommentController {
 			@Valid @RequestBody Comment comment) {
 		return postRepository.findById(postId).map(post -> {
 			comment.setPost(post);
-			comment.setText(comment.getText());
 			return commentRepository.save(comment);
 		}).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId + " not found"));
 	}
@@ -55,6 +54,7 @@ public class CommentController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Comment Id " + commentId + " not found"));
 	}
 	
+	@DeleteMapping("/posts/{postId}/comments/{commentId}")
 	public ResponseEntity<?> deleteComment(@PathVariable (value = "postId") Long postId,
 			@PathVariable (value = "commentId") Long commentId){
 		return commentRepository.findByIdAndPostId(commentId, postId).map(comment ->{
